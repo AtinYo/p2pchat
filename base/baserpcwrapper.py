@@ -25,6 +25,12 @@ class BaseRpcWrapper(object):
             else:
                 print 'error: RcpWrapper is unbind to application.'
         return func
+        # 这里可以这么改. rpcwrapper里面加一个funclist,加一个callback.
+        # 这样就可以实现多层函数调用+有回调(可以拿到返回值)
+        # 比如rpcwrapper.A().B().C().RPCSend(callback)
+        # 不断地保存A,B,C,并且返回rpcwrapper自身,直到遇到RPCSend的时候,就把方法通过con传到对端,传完就清空funclist
+        # 其中callback就是对端用来调用本端函数,这样就形成了回调
+        # 不要质疑上面注释,是可以实现的(现成代码的优化版本),目前没空,以后再写.
 
     def Init(self, app):
         if app is not None:
