@@ -1,17 +1,63 @@
 # -*- coding: utf-8 -*-
 # @author: Atin
 # @time: 2018-08-27
-import utils.tools as tl
-import types
+import traceback
 
 try:
     event_map
 except NameError:
     event_map = {}
 
-
+# 获取事件
 def GetEventByName(event_name):
-    return event_map.get(event_name)
+    try:
+        if event_name is None or not isinstance(event_name, str):
+            raise Exception('event_name must be str!')
+        return event_map.get(event_name)
+    except:
+        traceback.print_exc()
+
+
+# 移除事件
+def RemoveEvent(event_name):
+    if event_name in event_map:
+        event_map[event_name].RemoveAllListener()
+        del event_map[event_name]
+
+
+# 发事件
+def SendEvent(event_name, *args):
+    event = GetEventByName(event_name)
+    if event:
+        event.Notify(*args)
+
+
+# 注册事件的监听者
+def RegisterEventListener(event_name, listener, callback):
+    if event_name not in event_map.keys():
+        event_map[event_name] = Event(event_name)
+    event_map[event_name].AddListener(listener, callback)
+
+
+# 移除事件的指定监听者
+def RemoveEventListener(event_name, listener):
+    if event_name not in event_map.keys():
+        event_map[event_name] = Event(event_name)
+    event_map[event_name].RemoveListener(listener)
+
+
+# 移除事件的指定监听者的指定函数
+def RemoveEventCallBackByListener(event_name, listener, callback):
+    if event_name not in event_map.keys():
+        event_map[event_name] = Event(event_name)
+    event_map[event_name].RemoveCallBackByListener(listener, callback)
+
+
+# 移除事件的所有监听者
+def RemoveEventAllListener(event_name):
+    if event_name not in event_map.keys():
+        event_map[event_name] = Event(event_name)
+    event_map[event_name].RemoveAllListener()
 
 
 # Event对象是一个被观察者, 观察者通过将自身的回调函数绑定到被观察者身上来实现监听
@@ -33,23 +79,21 @@ class Event(object):
         """
         try:
             if callback is None:
-                raise tl.CustomException("In Event.AddListener, arg 'callback' can't be None!")
-            elif not isinstance(callback, types.FunctionType) and not isinstance(callback, types.MethodType):
-                raise tl.CustomException("In Event.AddListener, arg 'callback' must be function or instancemethod!")
+                raise Exception("In Event.AddListener, arg 'callback' can't be None!")
+            elif not callable(callback):
+                raise Exception("In Event.AddListener, arg 'callback' must be callable!")
             else:
-                if listener not in self.__dListener.keys():
-                    lCallBack = self.__dListener[listener] = []
-                else:
-                    lCallBack = self.__dListener[listener]
+                if listener not in self.__dListener:
+                    self.__dListener[listener] = []
+
+                lCallBack = self.__dListener[listener]
 
                 if callback in lCallBack:
-                    raise tl.CustomException("In Event.AddListener, callback:" + callback.__name__ +
-                                             " is already exist!")
+                    raise Exception("In Event.AddListener, callback:" + callback.__name__ + " is already exist!")
                 else:
                     lCallBack.append(callback)
-            pass
-        except tl.CustomException:
-            tl.Logger.LogTraceBack()
+        except:
+            traceback.print_exc()
 
     def RemoveListener(self, listener):
         if listener in self.__dListener.keys():
@@ -64,23 +108,14 @@ class Event(object):
 
     def Notify(self, *args):
         try:
-            for k, v in self.__dListener.items():
-                for cb in v:
-                    if isinstance(cb, types.FunctionType):
+            for callbacklist in self.__dListener.values():
+                for cb in callbacklist:
+                    if len(args) > 0:
                         cb(*args)
-                    elif isinstance(cb, types.MethodType):
-                        # for method,if the cb.__self is None,use the listener as the first argument.
-                        if cb.__self__ is None:
-                            cb(k, *args)
-                        else:
-                            cb(*args)
                     else:
-                        raise tl.CustomException("In Notify, calling a uncertain type CallBack?")
-                    pass
-
-        except BaseException as e:
-            print(e)
-            tl.Logger.LogTraceBack()
+                        cb()
+        except:
+            traceback.print_exc()
 
     def GetEventName(self):
         return self.__name
@@ -96,11 +131,12 @@ class Event(object):
 # @Event.event_decorator("ClickEvent")
 # def HandleClickEvent():
 #     print("test")
+# 说人话就是用下面修饰符修饰的只能是函数或者不依赖队友的对象方法
     @staticmethod
     def event_decorator(event_name):
         try:
             if not isinstance(event_name, str):
-                raise tl.CustomException("event_name must be a string.")
+                raise Exception("event_name must be a string.")
 
             def regist_event_wrapper(callback):
                 if event_name not in event_map.keys():
@@ -108,7 +144,7 @@ class Event(object):
                 event_map[event_name].AddListener(None, callback)
                 return callback
 
-        except tl.CustomException:
-            print tl.Logger.LogTraceBack()
+        except:
+            traceback.print_exc()
 
         return regist_event_wrapper
