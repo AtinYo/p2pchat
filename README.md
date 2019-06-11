@@ -16,5 +16,6 @@ p2pchat
 ### We will return and make it better.
 
 AtinYo & Lida Wang.
+Find more information at https://github.com/AtinYo/
 
 Summer, 2019.
