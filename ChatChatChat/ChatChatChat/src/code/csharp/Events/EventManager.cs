@@ -29,7 +29,7 @@ namespace Core.src.Events
         //构造函数
         private EventManager()
         {
-            Init();
+
         }
 
         #region ISystem implement
