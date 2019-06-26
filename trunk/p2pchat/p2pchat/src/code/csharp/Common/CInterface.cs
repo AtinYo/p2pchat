@@ -35,7 +35,8 @@ namespace Core.CommonInterface
                             {
                                 throw new InvalidOperationException(String.Format("The constructor for {0} must be private and take no parameters.", typeof(T)));
                             }
-                            m_instance = ctors[0].Invoke(null) as T;
+                            var obj = ctors[0].Invoke(null);
+                            m_instance = obj as T;
                         }
                     }
                 }

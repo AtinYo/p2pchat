@@ -10,7 +10,7 @@ namespace ChatChatChat.src.code.csharp.Systems
 {
     public class WrapperSys : TSingleton<WrapperSys>, ISystem
     {
-        private ScriptEngine pyEngine = null;
+        private ScriptEngine pyEngine;
         private WrapperSys()
         {
 
@@ -18,11 +18,17 @@ namespace ChatChatChat.src.code.csharp.Systems
 
         public void Init()
         {
-            继续写这里,然后就pywrapper写一写.UI让lida来
-            var pyStr = LoadPythonWrapperFromFile();
+            int a = 1;
+            var str = System.AppDomain.CurrentDomain.BaseDirectory;
+            str = System.Windows.Forms.Application.StartupPath;
+            DirectoryInfo info = new DirectoryInfo(System.Windows.Forms.Application.StartupPath);
+
+            String path = info.Parent.Parent.FullName;
+            var pyStr = LoadPythonWrapperFromFile(path + @"\src\code\py\pymain.py");
+
             pyEngine = Python.CreateEngine(); //脚本引擎
             ScriptScope pyScore = pyEngine.CreateScope(); //脚本上下文变量之类存放处
-            var script = pyEngine.CreateScriptSourceFromFile(@"E:\Atin_Py_project\p2pchat\testfordel\test2.py");
+            var script = pyEngine.CreateScriptSourceFromString(pyStr);
             var compiled = script.Compile();
             compiled.Execute(pyScore);
 
@@ -31,9 +37,7 @@ namespace ChatChatChat.src.code.csharp.Systems
             //Console.WriteLine("");
             //pyEngine.Execute(pyStr, pyScore);
             //pyEngine.Operations.Invoke(pyScore.GetVariable("test222"), 2);
-            var r = pyEngine.Operations.InvokeMember(pyScore, "test222", 2);
-            Console.WriteLine((string)r);
-            Console.Read();
+            //var r = pyEngine.Operations.InvokeMember(pyScore, "test222", 2);
         }
 
         public void Update(double deltaTime)
@@ -46,17 +50,10 @@ namespace ChatChatChat.src.code.csharp.Systems
 
         }
 
-        static string LoadPythonWrapperFromFile()
+        private string LoadPythonWrapperFromFile(string path)
         {
-            var pyStr = File.ReadAllText(@"E:\Atin_Py_project\p2pchat\testfordel\test2.py", Encoding.UTF8);
-            //反正到时候根据c#程序入口去找到需要加入到python的sys的path的路径即可
-            //Console.Write(pyStr);
+            var pyStr = File.ReadAllText(path, Encoding.UTF8);
             return pyStr;
-        }
-
-        static void Main(string[] args)
-        {
-
         }
 
         static object CallPyMethod(List<object> paramList)
