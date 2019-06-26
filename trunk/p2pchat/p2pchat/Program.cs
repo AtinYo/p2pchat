@@ -1,8 +1,6 @@
 ﻿using Core;
 using Core.Logger;
-using p2pchat.src.code.csharp.UI;
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace p2pchat
@@ -33,7 +31,7 @@ namespace p2pchat
             //下面找个事件做成UI架构的调用
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainPanel());
+            //Application.Run(new MainPanel());
         }
     }
 }

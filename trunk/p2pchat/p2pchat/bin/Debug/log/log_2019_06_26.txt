@@ -1,0 +1,30 @@
+----------------------------------------------------
+[2019-06-26 17:45:21]	
+System.IO.FileNotFoundException: 未能加载文件或程序集“System.Runtime, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a”或它的某一个依赖项。系统找不到指定的文件。
+文件名:“System.Runtime, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a”
+   在 ChatChatChat.src.code.csharp.Systems.WrapperSys.Init()
+   在 Core.SystemManager.Init() 位置 E:\Atin_github_proj\p2pchat\trunk\p2pchat\p2pchat\src\code\csharp\Systems\SystemManager.cs:行号 42
+   在 Core.ProgramMain.InitAllSystem() 位置 E:\Atin_github_proj\p2pchat\trunk\p2pchat\p2pchat\src\code\csharp\ProgramMain\ProgramMain.cs:行号 73
+   在 Core.ProgramMain.Init() 位置 E:\Atin_github_proj\p2pchat\trunk\p2pchat\p2pchat\src\code\csharp\ProgramMain\ProgramMain.cs:行号 16
+   在 p2pchat.Program.Main() 位置 E:\Atin_github_proj\p2pchat\trunk\p2pchat\p2pchat\Program.cs:行号 18
+
+=== 预绑定状态信息 ===
+日志: DisplayName = System.Runtime, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a
+ (Fully-specified)
+日志: Appbase = file:///E:/Atin_github_proj/p2pchat/trunk/p2pchat/p2pchat/bin/Debug/
+日志: 初始 PrivatePath = NULL
+调用程序集: IronPython, Version=2.7.9.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1。
+===
+日志: 此绑定从 default 加载上下文开始。
+日志: 正在使用应用程序配置文件: E:\Atin_github_proj\p2pchat\trunk\p2pchat\p2pchat\bin\Debug\p2pchat.vshost.exe.Config
+日志: 使用主机配置文件: 
+日志: 使用 C:\Windows\Microsoft.NET\Framework\v4.0.30319\config\machine.config 的计算机配置文件。
+日志: 在应用程序配置文件中找到重定向: 4.2.0.0 已重定向到 4.2.0.0。
+日志: 策略后引用: System.Runtime, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a
+日志: 尝试下载新的 URL file:///E:/Atin_github_proj/p2pchat/trunk/p2pchat/p2pchat/bin/Debug/System.Runtime.DLL。
+日志: 尝试下载新的 URL file:///E:/Atin_github_proj/p2pchat/trunk/p2pchat/p2pchat/bin/Debug/System.Runtime/System.Runtime.DLL。
+日志: 尝试下载新的 URL file:///E:/Atin_github_proj/p2pchat/trunk/p2pchat/p2pchat/bin/Debug/System.Runtime.EXE。
+日志: 尝试下载新的 URL file:///E:/Atin_github_proj/p2pchat/trunk/p2pchat/p2pchat/bin/Debug/System.Runtime/System.Runtime.EXE。
+
+----------------------------------------------------
+

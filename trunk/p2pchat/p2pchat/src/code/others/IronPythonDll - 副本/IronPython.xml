@@ -746,20 +746,6 @@
             additional options.
             </summary>
         </member>
-        <member name="M:IronPython.Hosting.Python.CreateRuntime(System.AppDomain)">
-            <summary>
-            Creates a new ScriptRuntime with the IronPython scripting engine pre-configured
-            in the specified AppDomain.  The remote ScriptRuntime may  be manipulated from 
-            the local domain but all code will run in the remote domain.
-            </summary>
-        </member>
-        <member name="M:IronPython.Hosting.Python.CreateRuntime(System.AppDomain,System.Collections.Generic.IDictionary{System.String,System.Object})">
-            <summary>
-            Creates a new ScriptRuntime with the IronPython scripting engine pre-configured
-            in the specified AppDomain with additional options.  The remote ScriptRuntime may 
-            be manipulated from the local domain but all code will run in the remote domain.
-            </summary>
-        </member>
         <member name="M:IronPython.Hosting.Python.CreateEngine">
             <summary>
             Creates a new ScriptRuntime and returns the ScriptEngine for IronPython. If
@@ -772,26 +758,6 @@
             Creates a new ScriptRuntime with the specified options and returns the 
             ScriptEngine for IronPython. If the ScriptRuntime is required it can be 
             acquired from the Runtime property on the engine.
-            </summary>
-        </member>
-        <member name="M:IronPython.Hosting.Python.CreateEngine(System.AppDomain)">
-            <summary>
-            Creates a new ScriptRuntime and returns the ScriptEngine for IronPython. If
-            the ScriptRuntime is required it can be acquired from the Runtime property
-            on the engine.
-            
-            The remote ScriptRuntime may be manipulated from the local domain but 
-            all code will run in the remote domain.
-            </summary>
-        </member>
-        <member name="M:IronPython.Hosting.Python.CreateEngine(System.AppDomain,System.Collections.Generic.IDictionary{System.String,System.Object})">
-            <summary>
-            Creates a new ScriptRuntime with the specified options and returns the 
-            ScriptEngine for IronPython. If the ScriptRuntime is required it can be 
-            acquired from the Runtime property on the engine.
-            
-            The remote ScriptRuntime may be manipulated from the local domain but 
-            all code will run in the remote domain.
             </summary>
         </member>
         <member name="M:IronPython.Hosting.Python.GetEngine(Microsoft.Scripting.Hosting.ScriptRuntime)">
@@ -984,12 +950,6 @@
             
             This is exposed as a service through PythonEngine and the helper class
             uses this service to get the correct remoting semantics.
-            </summary>
-        </member>
-        <member name="M:IronPython.Hosting.PythonService.GetLocalCommandDispatcher">
-            <summary>
-            Returns an ObjectHandle to a delegate of type Action[Action] which calls the current
-            command dispatcher.
             </summary>
         </member>
         <member name="F:IronPython.Hosting.ErrorCodes.IncompleteStatement">
@@ -2550,6 +2510,11 @@
             string providing this method
             </summary>
         </member>
+        <member name="M:IronPython.Runtime.ByteArray.op_Addition(IronPython.Runtime.ByteArray,System.String)">
+            <summary>
+            This overload is specifically implemented because in IronPython strings are unicode
+            </summary>
+        </member>
         <member name="M:IronPython.Runtime.Bytes.istitle">
             <summary>
             return true if self is a titlecased string and there is at least one
@@ -2627,40 +2592,6 @@
             
             A common use for this is to enable running all REPL commands on the UI thread while the REPL
             continues to run on a non-UI thread.
-            </summary>
-        </member>
-        <member name="M:IronPython.Runtime.ClrModule.LoadTypeLibrary(IronPython.Runtime.CodeContext,System.Object)">
-            <summary>
-            LoadTypeLibrary(rcw) -> type lib desc
-            
-            Gets an ITypeLib object from OLE Automation compatible RCW ,
-            reads definitions of CoClass'es and Enum's from this library
-            and creates an object that allows to instantiate coclasses
-            and get actual values for the enums.
-            </summary>
-        </member>
-        <member name="M:IronPython.Runtime.ClrModule.LoadTypeLibrary(IronPython.Runtime.CodeContext,System.Guid)">
-            <summary>
-            LoadTypeLibrary(guid) -> type lib desc
-            
-            Reads the latest registered type library for the corresponding GUID,
-            reads definitions of CoClass'es and Enum's from this library
-            and creates a IDynamicMetaObjectProvider that allows to instantiate coclasses
-            and get actual values for the enums.
-            </summary>
-        </member>
-        <member name="M:IronPython.Runtime.ClrModule.AddReferenceToTypeLibrary(IronPython.Runtime.CodeContext,System.Object)">
-            <summary>
-            AddReferenceToTypeLibrary(rcw) -> None
-            
-            Makes the type lib desc available for importing. See also LoadTypeLibrary.
-            </summary>
-        </member>
-        <member name="M:IronPython.Runtime.ClrModule.AddReferenceToTypeLibrary(IronPython.Runtime.CodeContext,System.Guid)">
-            <summary>
-            AddReferenceToTypeLibrary(guid) -> None
-            
-            Makes the type lib desc available for importing.  See also LoadTypeLibrary.
             </summary>
         </member>
         <member name="M:IronPython.Runtime.ClrModule.GetClrType(System.Type)">
