@@ -5,9 +5,8 @@
 
 
 def start():
-    print 'start'
     pass
 
 
-def update():
+def update(delta_time):
     pass

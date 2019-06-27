@@ -11,6 +11,7 @@ namespace ChatChatChat.src.code.csharp.Systems
     public class WrapperSys : TSingleton<WrapperSys>, ISystem
     {
         private ScriptEngine pyEngine;
+        private ScriptScope pyScore;
         private WrapperSys()
         {
 
@@ -18,31 +19,30 @@ namespace ChatChatChat.src.code.csharp.Systems
 
         public void Init()
         {
-            int a = 1;
-            var str = System.AppDomain.CurrentDomain.BaseDirectory;
-            str = System.Windows.Forms.Application.StartupPath;
+            //var str = System.AppDomain.CurrentDomain.BaseDirectory;
+            //str = System.Windows.Forms.Application.StartupPath;
             DirectoryInfo info = new DirectoryInfo(System.Windows.Forms.Application.StartupPath);
 
             String path = info.Parent.Parent.FullName;
             var pyStr = LoadPythonWrapperFromFile(path + @"\src\code\py\pymain.py");
 
             pyEngine = Python.CreateEngine(); //脚本引擎
-            ScriptScope pyScore = pyEngine.CreateScope(); //脚本上下文变量之类存放处
+            pyScore = pyEngine.CreateScope(); //脚本上下文变量之类存放处
             var script = pyEngine.CreateScriptSourceFromString(pyStr);
             var compiled = script.Compile();
             compiled.Execute(pyScore);
 
-            //pyScore.SetVariable("vauleList", 1);
-            //var vauleList = pyScore.GetVariable("vauleList");
-            //Console.WriteLine("");
-            //pyEngine.Execute(pyStr, pyScore);
-            //pyEngine.Operations.Invoke(pyScore.GetVariable("test222"), 2);
-            //var r = pyEngine.Operations.InvokeMember(pyScore, "test222", 2);
+            //object v = GetPyValue("a");
+            //SetPyValue("a", 12+"a");
+            //v = GetPyValue("a");
+            //v = CallPyMethod("update", 1, "s");
+            //v = CallPyMethod("start");
+            
         }
 
         public void Update(double deltaTime)
         {
-
+            CallPyMethod("update", deltaTime);
         }
 
         public void Destroy()
@@ -56,10 +56,12 @@ namespace ChatChatChat.src.code.csharp.Systems
             return pyStr;
         }
 
-        static object CallPyMethod(List<object> paramList)
+        public object CallPyMethod(string methodName, params object[] parameters)
         {
-            //下面是自己的例子
-            //pyEngine.Operations.Invoke(pyScore.GetVariable("test222"), 2);
+            if (!String.IsNullOrEmpty(methodName))
+            {
+                return pyEngine.Operations.Invoke(pyScore.GetVariable(methodName) as object, parameters);
+            }
 
             //或者这样写
             //var pythonWrapper = pyScore.GetVariable("pythonWrapper");
@@ -82,16 +84,23 @@ namespace ChatChatChat.src.code.csharp.Systems
             return null;
         }
 
-        static object GetPyValue()
+        public object GetPyValue(string valueName)
         {
-            //通过 CreateScope 的scope去读取变量
-            // var vauleList = pyScore.GetVariable("vauleList");
+            if (!String.IsNullOrEmpty(valueName) && pyScore != null)
+            {
+                //通过 CreateScope 的scope去读取变量
+                return pyScore.GetVariable(valueName);
+            }
             return null;
         }
 
-        static void SetPyValue()
+        public void SetPyValue(string valueName, object value)
         {
-            //pyScore.SetVariable("vauleList", 1);
+            if (!String.IsNullOrEmpty(valueName) && pyScore != null)
+            {
+                //通过 CreateScope 的scope去设置变量
+                pyScore.SetVariable(valueName, value);
+            }
         }
     }
 }
