@@ -27,11 +27,15 @@ namespace ChatChatChat.src.code.csharp.Systems
             var pyStr = LoadPythonWrapperFromFile(path + @"\src\code\py\pymain.py");
 
             pyEngine = Python.CreateEngine(); //脚本引擎
+            var paths = pyEngine.GetSearchPaths();
+            paths.Add(path + @"\src\code\py\");
+            pyEngine.SetSearchPaths(paths);
             pyScore = pyEngine.CreateScope(); //脚本上下文变量之类存放处
             var script = pyEngine.CreateScriptSourceFromString(pyStr);
             var compiled = script.Compile();
             compiled.Execute(pyScore);
 
+            CallPyMethod("init");
             //object v = GetPyValue("a");
             //SetPyValue("a", 12+"a");
             //v = GetPyValue("a");
