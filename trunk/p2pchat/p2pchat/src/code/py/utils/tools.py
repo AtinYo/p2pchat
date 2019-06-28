@@ -3,6 +3,8 @@
 # @time: 2018-08-27
 
 import sys
+import time
+import os
 # Python脚本层的旧的标准输出对象
 __console__ = None
 
@@ -21,6 +23,7 @@ def InitLogger():
 class LogRedirect(object):
     def __init__(self):
         super(LogRedirect, self).__init__()
+        self.a = 0
         # self.clearLocalFile()
 
     # -------------------------------------------------------------------------
@@ -48,23 +51,24 @@ class LogRedirect(object):
             if type(content) == str:
                 pass
 
+            if content == '\n' or len(content) <= 0 or content == '\t' or content == '\r':
+                # 不知道为什么print的时候会额外输入一些奇奇怪怪的东西
+                return
+
             # 写文件
-            f = open('..\\..\\src\\code\\py\\py_log.txt', 'a')
-            f.write(content)
+            log_file_name = '..\\..\\src\\code\\py\\pylogfile\\pylog_{}.txt'.format(time.strftime('%Y_%m_%d', time.localtime(time.time())))
+            if not os.path.exists(log_file_name):
+                f = open(log_file_name, 'w')
+            else:
+                f = open(log_file_name, 'a')
+            f.write(self.getTimeStr() + content + '\n')
+            self.a += 1
             f.close()
 
         except:
-            import traceback
-            traceback.print_exc()
+            pass
 
-    # # 清空本地log文件
-    # def clearLocalFile(self):
-    #     try:
-    #         f = open('logAtin.txt', 'w')
-    #         f.write('')
-    #         f.close()
-    #     except:
-    #         import traceback
-    #         traceback.print_exc()
+    def getTimeStr(self):
+        return '[{}]\t'.format(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
 
 

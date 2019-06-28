@@ -19,11 +19,26 @@
 # f.write('APP_PATH={}\n'.format(APP_PATH))
 
 import utils.tools
+from client.client import Client
+from server.server import Server
+
+# py的全局对象
+ClientObj = None
+ServerObj = None
 
 
 def init():
-    utils.tools.InitLogger()
-    print 'dqiAtin!'
+    utils.tools.InitLogger()  # 初始化py部分的日志处理
+
+    global ClientObj
+    if ClientObj is None:
+        print 'create, ClientObj!'
+        ClientObj = Client('p2pchat_client')
+
+    global ServerObj
+    if ServerObj is None:
+        print 'create, ServerObj!'
+        ServerObj = Server()
 
 
 def update(delta_time):
@@ -32,3 +47,5 @@ def update(delta_time):
 
 def destroy():
     pass
+
+

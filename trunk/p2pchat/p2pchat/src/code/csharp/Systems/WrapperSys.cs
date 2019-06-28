@@ -51,7 +51,7 @@ namespace ChatChatChat.src.code.csharp.Systems
 
         public void Destroy()
         {
-
+            CallPyMethod("destroy");
         }
 
         private string LoadPythonWrapperFromFile(string path)
