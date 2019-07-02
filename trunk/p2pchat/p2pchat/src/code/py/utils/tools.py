@@ -2,6 +2,7 @@
 # @author: Atin
 # @time: 2018-08-27
 
+import socket
 import sys
 import time
 import os
@@ -72,3 +73,24 @@ class LogRedirect(object):
         return '[{}]\t'.format(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
 
 
+# 内网IP
+def GetLocalIP():
+    try:
+        # ip = socket.gethostbyname(socket.gethostname())
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(('8.8.8.8', 80))
+        ip = s.getsockname()[0]
+        return ip
+    except socket.error:
+        return '127.0.0.1'
+
+
+# 获取全球IP
+def GetGlobalIP():
+    try:
+        import urllib2
+        url = 'http://icanhazip.com/'  # 参考 https://major.io/icanhazip-com-faq/
+        ip = urllib2.urlopen(url).read().strip('\n')
+        return ip
+    except:
+        return '127.0.0.1'

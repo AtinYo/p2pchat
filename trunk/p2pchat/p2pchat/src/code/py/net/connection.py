@@ -2,22 +2,7 @@
 # @author: Atin
 # @time: 2018-08-27
 import socket
-
-
-def GetLocalIP():
-    """
-        查询本机ip地址
-        socket.gethostbyname(socket.gethostname()) 这种写法可能拿到的是虚拟机的ip
-        :return: ip
-    """
-    try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(('8.8.8.8', 80))
-        ip = s.getsockname()[0]
-    finally:
-        if s:
-            s.close()
-    return ip
+import utils.tools
 
 
 class Connection(object):
@@ -61,12 +46,9 @@ class Connection(object):
                 self.need_auto_reconnect = need_auto_reconnect
                 return True
 
-            except socket.error as msg:
-                print(msg)
-                self.DisConnect()
-
-            except BaseException as msg:
-                print(msg)
+            except BaseException:
+                import traceback
+                print traceback.format_exc()
                 self.DisConnect()
 
     def DisConnect(self):
@@ -83,17 +65,21 @@ class Connection(object):
             print("Connection accept...")
             self.temp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.temp.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-            self.temp.bind((GetLocalIP(), bind_port))
-            self.temp.listen(1)  # because it is p2p connection.
+            # ip1 = utils.tools.GetGlobalIP()
+            # ip2 = utils.tools.GetLocalIP()
+            ip = '0.0.0.0'
+            self.temp.bind((ip, bind_port))
+            self.temp.listen(5)  # because it is p2p connection.
             self.socket, self.ip = self.temp.accept()
             self.temp = None
             print("From ip = "+str(self.ip)+", port = "+str(bind_port)+" has been connected.")
             self.state = Connection.STATE_CONNECTED
             if self.handle_accept is not None and callable(self.handle_accept):
                 self.handle_accept()
-        except socket.error as msg:
-            print msg
+        except BaseException:
             self.DisConnect()
+            import traceback
+            print traceback.format_exc()
 
     # 尝试重连次数超过上限,就会调用这个函数
     def OnNoConnection(self):
@@ -119,8 +105,9 @@ class Connection(object):
                 if not self.state == Connection.STATE_CONNECTED:
                     raise socket.error("In Connection 'SendData', con.state must be connected when senddata.")
                 self.socket.sendall(data)
-            except socket.error as msg:
-                print msg
+            except BaseException:
+                import traceback
+                print traceback.format_exc()
                 self.DisConnect()
                 if self.need_auto_reconnect:
                     while self.Reconncet():
@@ -134,8 +121,9 @@ class Connection(object):
                     return self.temp
                 else:
                     raise socket.error("In Connection 'RecvData', socket is disconnect.")
-        except socket.error as msg:
-            print msg
+        except BaseException:
+            import traceback
+            print traceback.format_exc()
             self.DisConnect()
             return None
         # 这里注意有坑,如果写成finally return None.顺序是先finally的return再执行try的return,这样就拿不到返回值了

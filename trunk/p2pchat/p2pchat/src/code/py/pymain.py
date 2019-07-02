@@ -21,31 +21,23 @@
 import utils.tools
 from client.client import Client
 from server.server import Server
-
-# py的全局对象
-ClientObj = None
-ServerObj = None
+import globals
 
 
 def init():
     utils.tools.InitLogger()  # 初始化py部分的日志处理
-
-    global ClientObj
-    if ClientObj is None:
-        print 'create, ClientObj!'
-        ClientObj = Client('p2pchat_client')
-
-    global ServerObj
-    if ServerObj is None:
-        print 'create, ServerObj!'
-        ServerObj = Server()
+    globals.connector.init()
+    globals.pywrapper.init()
 
 
-def update(delta_time):
-    pass
+def update(delta):
+    globals.connector.update(delta)
+    globals.pywrapper.update(delta)
 
 
 def destroy():
-    pass
+    globals.connector.destroy()
+    globals.pywrapper.destroy()
+
 
 

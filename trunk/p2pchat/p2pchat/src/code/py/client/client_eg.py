@@ -3,12 +3,14 @@
 # @time: 2018-08-27
 from client import Client
 import threading
-from net.connection import GetLocalIP
 from net.protocolpacker import ProtocolEnum as pe
 from base.baserpcwrapper import BaseRpcWrapper
+import utils.tools
 
 c = Client("Client")
-c.InitConnection(GetLocalIP())
+ip = utils.tools.GetGlobalIP()  # 理论上可以的, 要测测外网直连情况
+# ip = utils.tools.GetLocalIP()
+c.InitConnection(ip)
 c.Start()
 
 
