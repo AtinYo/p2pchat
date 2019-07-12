@@ -68,9 +68,11 @@ class Connection(object):
             # ip1 = utils.tools.GetGlobalIP()
             # ip2 = utils.tools.GetLocalIP()
             ip = '0.0.0.0'
+            print 'listen ip={}'.format(ip)
             self.temp.bind((ip, bind_port))
             self.temp.listen(5)  # because it is p2p connection.
             self.socket, self.ip = self.temp.accept()
+            print 'client, socket={}, ip={}'.format(self.socket, self.ip)
             self.temp = None
             print("From ip = "+str(self.ip)+", port = "+str(bind_port)+" has been connected.")
             self.state = Connection.STATE_CONNECTED

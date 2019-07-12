@@ -9,7 +9,9 @@ import utils.tools
 
 c = Client("Client")
 ip = utils.tools.GetGlobalIP()  # 理论上可以的, 要测测外网直连情况
-# ip = utils.tools.GetLocalIP()
+ip = utils.tools.GetLocalIP()
+print 'global ip={}'.format(ip)
+
 c.InitConnection(ip)
 c.Start()
 
@@ -30,7 +32,7 @@ def fun():
     while 1:
         recv_data = c.RecvMsg()
         if recv_data:
-            # print "Client recv : " + str(recv_data)
+            print "Client recv : " + str(recv_data)
             pass
 
 
